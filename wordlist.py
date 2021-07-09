@@ -32,7 +32,6 @@ class WordList:
             Searches to find if a word in the list exists, returns a boolean
 
             >>> wl = WordList("test_dictionary.txt")
-            >>> wl.words = {'DOG', 'CAT'}
 
             CAT exists in word list, should return True
 
