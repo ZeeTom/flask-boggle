@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template, jsonify, session
 from uuid import uuid4
+import json
+
+from flask_debugtoolbar import DebugToolbarExtension
 
 from boggle import BoggleGame
 
@@ -27,3 +30,30 @@ def new_game():
     games[game_id] = game
 
     return {"gameId": game_id, "board": game.board}
+
+@app.route('/api/score-word', methods=['POST'])
+def score_word():
+    # print(request.data)
+    # request_data = json.loads(request.data)
+    
+
+    word = request.json['word']
+    game_id = request.json['gameId']
+    print('game ID is ', game_id)
+    print(word)
+    print(games)
+
+
+    game = games[game_id]
+    print(game)
+
+    is_in_word_list = game.is_word_in_word_list(word)
+    is_word_on_board = game.check_word_on_board(word)
+
+    if not is_in_word_list:
+        return jsonify({'result': 'not-word'})
+    
+    if not is_word_on_board:
+        return jsonify({'result': 'not-on-board'})
+
+    return jsonify({'result': 'ok'})
